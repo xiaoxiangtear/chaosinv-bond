@@ -33,6 +33,9 @@ def initializeData():
     ATTR = ATTR[ATTR['账户'].isin(banks_lt)]
     BANK = BANK[BANK['账户'].isin(banks_lt)]
 
+    DEAL = DEAL.sort_values(by='交易日',ascending=True)
+    ATTR = ATTR.sort_values(by='日期',ascending=True)
+
     return DEAL, ATTR, BANK, BONDINFO, CNBD
 DEAL, ATTR, BANK, BONDINFO, CNBD = initializeData()
 
@@ -224,8 +227,8 @@ container4 = st.container()
 container4.subheader('❉ 净值分析')
 col1, col2 = container4.columns(2)
 nav_df2 = ATTR.copy()
-ib = nav_df2['账户'] == bank
-nav_df2 = nav_df2[ib].set_index('日期')[['净值','账户DV01']].dropna()
+ib = (nav_df2['账户'] == bank) & (pd.to_datetime(nav_df2['日期'])<=pd.to_datetime(date))
+nav_df2 = nav_df2[ib].set_index('日期')[['净值','账户DV01']]
 fig1 = px.line(nav_df2['净值'], labels=dict(value=bank,variable=''))
 col1.plotly_chart(fig1, use_container_width=True)
 fig2 = px.line(nav_df2['账户DV01'], labels=dict(value=bank,variable=''))
