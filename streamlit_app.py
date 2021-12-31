@@ -169,7 +169,7 @@ with st.sidebar:
     )
     st.download_button(
         label="导出业绩数据",
-        data=convert_df(pd.DataFrame(np.random.random([100, 3]))),
+        data=convert_df(ATTR),
         file_name='attr.csv',
         mime='text/csv',
     )
